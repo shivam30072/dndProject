@@ -200,6 +200,7 @@ function App() {
                 sx={{
                   width: { xs: "100%", sm: 250 },
                   minHeight: { sm: 500 },
+                  maxHeight: 500,
                   borderRadius: 3,
                   paddingX: 2,
                   paddingTop: 2,
@@ -235,6 +236,7 @@ function App() {
                 sx={{
                   width: { xs: "100%", sm: 250 },
                   minHeight: { sm: 500 },
+                  maxHeight: 500,
                   borderRadius: 3,
                   paddingX: 2,
                   paddingTop: 2,
