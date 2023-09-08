@@ -67,6 +67,9 @@ const Taskform = ({
     try {
       const { data } = await axios.post("/api/task", taskDetails);
       setAllTasks([...allTasks, data]);
+      setOpen(false);
+      setTaskTitle("");
+      setTaskDesc("");
     } catch (error) {
       console.log("error", error);
     }
