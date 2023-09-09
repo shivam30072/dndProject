@@ -44,6 +44,9 @@ const Taskform = ({
       );
 
       setAllTasks(data);
+      setOpen(false);
+      setTaskTitle("");
+      setTaskDesc("");
     } catch (error) {
       console.log("Error while editing task", error);
     }
@@ -86,10 +89,7 @@ const Taskform = ({
   return (
     <>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>
-          {" "}
-          {taskId ? `Task Id #${taskId}` : "Task Form"}
-        </DialogTitle>
+        <DialogTitle> {taskId ? `Edit this task` : "Task Form"}</DialogTitle>
         <DialogContent>
           <TextField
             value={title}
@@ -109,7 +109,6 @@ const Taskform = ({
             rows={4}
             sx={{ marginTop: 4 }}
             value={desc}
-            autoFocus
             margin="dense"
             id="description"
             label="Description"

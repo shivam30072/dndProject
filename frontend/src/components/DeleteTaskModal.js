@@ -10,7 +10,6 @@ const DeleteTaskModal = ({
   setOpend,
 }) => {
   const deleteTask = async () => {
-    console.log("clicked");
     if (taskId) {
       try {
         const { data } = await axios.delete(`/api/task/${taskId}`);
@@ -31,10 +30,7 @@ const DeleteTaskModal = ({
   return (
     <>
       <Dialog open={opend} onClose={handleClose}>
-        <DialogTitle>
-          {" "}
-          {taskId ? `Delete Task with id #${taskId}` : "Delete this task"}
-        </DialogTitle>
+        <DialogTitle> {"Delete this task"}</DialogTitle>
 
         <DialogActions>
           <Button onClick={handleClose}>Back</Button>
