@@ -4,8 +4,10 @@ const app = express();
 const path = require("path");
 const connectDB = require("./db/connect");
 const taskRouter = require("./routes/taskRoutes");
+const userRouter = require("./routes/userRoutes");
 
 app.use(express.json());
+app.use("/api/user", userRouter);
 app.use("/api/task", taskRouter);
 
 //------------------------Deployment-----------------
