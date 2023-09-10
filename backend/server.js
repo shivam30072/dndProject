@@ -5,10 +5,11 @@ const path = require("path");
 const connectDB = require("./db/connect");
 const taskRouter = require("./routes/taskRoutes");
 const userRouter = require("./routes/userRoutes");
+const authMiddleware = require("./middleware/authentication");
 
 app.use(express.json());
 app.use("/api/user", userRouter);
-app.use("/api/task", taskRouter);
+app.use("/api/task", authMiddleware, taskRouter);
 
 //------------------------Deployment-----------------
 
