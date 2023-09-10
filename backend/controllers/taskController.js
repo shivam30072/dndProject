@@ -23,8 +23,13 @@ const getAllTask = asyncHandler(async (req, res) => {
 
 const updateTask = asyncHandler(async (req, res) => {
   const taskId = req.params.id;
+  const { title } = req.body;
   if (!taskId) {
     return res.status(400).json({ message: "Params not found error" });
+  }
+
+  if (!title) {
+    return res.status(400).json({ message: "title not found error" });
   }
 
   const updatedTask = await Task.findByIdAndUpdate(taskId, req.body);

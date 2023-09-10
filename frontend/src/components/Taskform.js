@@ -45,6 +45,7 @@ const Taskform = ({
 
       setAllTasks(data);
       setOpen(false);
+      setTaskId("");
       setTaskTitle("");
       setTaskDesc("");
     } catch (error) {
