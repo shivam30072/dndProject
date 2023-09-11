@@ -18,7 +18,7 @@ const signupUser = asyncHandler(async (req, res) => {
 
   const user = await User.create({ name, email, password });
   if (user) {
-    res.status(201).json({ user: { name: user.name, id: user._id } });
+    res.status(201).json({ user });
   } else {
     res.status(400);
     throw new Error("Failed to create a user");
