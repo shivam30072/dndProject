@@ -7,8 +7,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import axios from "axios";
 
-const Authenticate = () => {
+const Authenticate = ({ setLoggedIn }) => {
   const [open, setOpen] = useState(true);
   const [loginSignup, setLoginSignup] = useState("signup");
   const [userData, setUserData] = useState({
@@ -17,6 +18,7 @@ const Authenticate = () => {
     password: "",
     confirmPassword: "",
   });
+  const { name, email, password, confirmPassword } = userData;
 
   const handleChangeForm = () => {
     if (loginSignup === "signup") {
@@ -25,6 +27,7 @@ const Authenticate = () => {
       setLoginSignup("signup");
     }
   };
+
   const handleInputChange = (e) => {
     setUserData({
       ...userData,
@@ -32,34 +35,62 @@ const Authenticate = () => {
     });
   };
 
-  const apiCallForAuthentication = (
-    name,
-    email = "",
-    password = "",
-    confirmPassword
-  ) => {
+  const apiCallForAuthentication = async () => {
+    let userInfo;
     if (loginSignup === "signup") {
-      console.log({ name, email, password, confirmPassword });
+      userInfo = {
+        name,
+        email,
+        password,
+      };
     } else {
-      console.log(userData.email, userData.password);
+      userInfo = {
+        email,
+        password,
+      };
+    }
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        `/api/user/${loginSignup}`,
+        userInfo,
+        config
+      );
+      if (loginSignup === "login") {
+        localStorage.setItem("userDetails", JSON.stringify(data));
+        localStorage.setItem("loggedIn", true);
+        setOpen(false);
+        setLoggedIn(true);
+      }
+    } catch (error) {
+      console.log("error occured", error);
     }
   };
 
   const handleSubmit = () => {
-    const { name, email, password, confirmPassword } = userData;
     if (loginSignup === "signup") {
       if (!name || !email || !password || !confirmPassword) {
         alert("all fields are mandatory");
         return;
       }
-      apiCallForAuthentication(name, email, password, confirmPassword);
+
+      if (password !== confirmPassword) {
+        alert("Password and Confirm Password should be same");
+        return;
+      }
+      apiCallForAuthentication();
+      setLoginSignup("login");
     } else {
       if (!email || !password) {
         alert("Both fields are mandatory");
         return;
       }
-      console.log({ email, password });
       apiCallForAuthentication();
+      console.log("User Logged in");
     }
     setUserData({
       name: "",
@@ -71,7 +102,7 @@ const Authenticate = () => {
 
   return (
     <Dialog
-      open={true}
+      open={open}
       sx={{
         minHeight: "100vh",
         bgcolor: "#e5e6e6",
@@ -84,7 +115,7 @@ const Authenticate = () => {
       <DialogContent sx={{}}>
         {loginSignup === "signup" && (
           <TextField
-            value={userData.name}
+            value={name}
             autoFocus
             margin="dense"
             name="name"
@@ -97,7 +128,7 @@ const Authenticate = () => {
         )}
         <TextField
           sx={{ marginTop: 2 }}
-          value={userData.email}
+          value={email}
           margin="dense"
           name="email"
           label="Email"
@@ -108,7 +139,7 @@ const Authenticate = () => {
         />
         <TextField
           sx={{ marginTop: 2 }}
-          value={userData.password}
+          value={password}
           margin="dense"
           name="password"
           label="Password"
@@ -120,7 +151,7 @@ const Authenticate = () => {
         {loginSignup === "signup" && (
           <TextField
             sx={{ marginTop: 2 }}
-            value={userData.confirmPassword}
+            value={confirmPassword}
             margin="dense"
             name="confirmPassword"
             label="Confirm Password"

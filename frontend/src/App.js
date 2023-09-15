@@ -2,21 +2,14 @@ import "./App.css";
 import Container from "./dnd/Container";
 import Authenticate from "./authentication/Authenticate";
 import { Box } from "@mui/material";
-// import background from "../public/dndphoto.png";
+import { useState } from "react";
 
 function App() {
-  const authdetails = false;
+  const [loggedIn, setLoggedIn] = useState(
+    localStorage.getItem("loggedIn") || false
+  );
   return (
-    <>
-      {authdetails ? (
-        <Container />
-      ) : (
-        // <Box sx={{ minHeight: "100vh", backgroundImage: `url(/dndphoto.png)` }}>
-        // {" "}
-        <Authenticate />
-        // </Box>
-      )}
-    </>
+    <>{loggedIn ? <Container /> : <Authenticate setLoggedIn={setLoggedIn} />}</>
   );
 }
 
