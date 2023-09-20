@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import SingleTask from "../components/SingleTask";
 import Header from "../components/Header";
 import { Box } from "@mui/material";
+import { TaskState } from "../context/AuthProvider";
 
 const Container = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -17,6 +18,7 @@ const Container = () => {
   const [open, setOpen] = useState(false);
   const [opend, setOpend] = useState(false);
 
+  const { token } = TaskState();
   const onDragEnd = (result) => {
     const { source, destination } = result;
 
@@ -58,7 +60,12 @@ const Container = () => {
   useEffect(() => {
     async function fetcAllTasks() {
       try {
-        const response = await axios.get("/api/task");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get("/api/task", config);
         const data = response.data?.allTasks;
         setAllTasks(data);
         setIsLoading(false);

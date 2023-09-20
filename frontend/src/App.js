@@ -1,16 +1,13 @@
 import "./App.css";
 import Container from "./dnd/Container";
 import Authenticate from "./authentication/Authenticate";
-import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TaskState } from "./context/AuthProvider";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(
-    localStorage.getItem("loggedIn") || false
-  );
-  return (
-    <>{loggedIn ? <Container /> : <Authenticate setLoggedIn={setLoggedIn} />}</>
-  );
+  const { isLoggedIn } = TaskState();
+
+  return <>{isLoggedIn ? <Container /> : <Authenticate />}</>;
 }
 
 export default App;

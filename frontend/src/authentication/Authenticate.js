@@ -8,8 +8,9 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import axios from "axios";
+import { TaskState } from "../context/AuthProvider";
 
-const Authenticate = ({ setLoggedIn }) => {
+const Authenticate = () => {
   const [open, setOpen] = useState(true);
   const [loginSignup, setLoginSignup] = useState("signup");
   const [userData, setUserData] = useState({
@@ -19,6 +20,7 @@ const Authenticate = ({ setLoggedIn }) => {
     confirmPassword: "",
   });
   const { name, email, password, confirmPassword } = userData;
+  const { setIsLoggedIn } = TaskState();
 
   const handleChangeForm = () => {
     if (loginSignup === "signup") {
@@ -63,8 +65,9 @@ const Authenticate = ({ setLoggedIn }) => {
       if (loginSignup === "login") {
         localStorage.setItem("userDetails", JSON.stringify(data));
         localStorage.setItem("loggedIn", true);
+        setIsLoggedIn(true);
         setOpen(false);
-        setLoggedIn(true);
+        window.location.reload();
       }
     } catch (error) {
       console.log("error occured", error);

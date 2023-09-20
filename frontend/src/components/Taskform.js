@@ -8,6 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import { TaskState } from "../context/AuthProvider";
 
 const Taskform = ({
   setAllTasks,
@@ -24,6 +25,8 @@ const Taskform = ({
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
 
+  const { token } = TaskState();
+
   const handleClose = () => {
     setOpen(false);
     setTaskId("");
@@ -31,19 +34,26 @@ const Taskform = ({
     setTaskDesc("");
   };
 
-  //editing task
-  const editTask = useCallback(async () => {
+  //API call for editing task
+  const editTask = async () => {
     const editedtaskdetails = {
       title,
       desc,
     };
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const { data } = await axios.patch(
         `/api/task/${taskId}`,
-        editedtaskdetails
+        editedtaskdetails,
+        config
       );
-
-      setAllTasks(data);
+      let updatedTask = allTasks.filter((t) => t._id !== data?._id);
+      updatedTask.push(data);
+      setAllTasks(updatedTask);
       setOpen(false);
       setTaskId("");
       setTaskTitle("");
@@ -51,8 +61,9 @@ const Taskform = ({
     } catch (error) {
       console.log("Error while editing task", error);
     }
-  }, [taskId, title, desc]);
+  };
 
+  // API for creating new task
   const handleSubmit = async () => {
     if (taskId) {
       editTask();
@@ -69,8 +80,14 @@ const Taskform = ({
     };
     // post request for adding task
     try {
-      const { data } = await axios.post("/api/task", taskDetails);
-      setAllTasks([...allTasks, data]);
+      console.log("token", token);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post("/api/task", taskDetails, config);
+      setAllTasks([data, ...allTasks]);
       setOpen(false);
       setTaskTitle("");
       setTaskDesc("");
