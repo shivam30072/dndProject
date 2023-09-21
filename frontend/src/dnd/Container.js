@@ -65,7 +65,10 @@ const Container = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get("/api/task", config);
+        const response = await axios.get(
+          "https://tempo-13s6.onrender.com/api/task",
+          config
+        );
         const data = response.data?.allTasks;
         setAllTasks(data);
         setIsLoading(false);

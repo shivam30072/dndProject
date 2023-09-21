@@ -47,7 +47,7 @@ const Taskform = ({
         },
       };
       const { data } = await axios.patch(
-        `/api/task/${taskId}`,
+        `https://tempo-13s6.onrender.com/api/task/${taskId}`,
         editedtaskdetails,
         config
       );
@@ -86,7 +86,11 @@ const Taskform = ({
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.post("/api/task", taskDetails, config);
+      const { data } = await axios.post(
+        "https://tempo-13s6.onrender.com/api/task",
+        taskDetails,
+        config
+      );
       setAllTasks([data, ...allTasks]);
       setOpen(false);
       setTaskTitle("");

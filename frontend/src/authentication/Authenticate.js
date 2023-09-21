@@ -58,7 +58,7 @@ const Authenticate = () => {
         },
       };
       const { data } = await axios.post(
-        `/api/user/${loginSignup}`,
+        `https://tempo-13s6.onrender.com/api/user/${loginSignup}`,
         userInfo,
         config
       );

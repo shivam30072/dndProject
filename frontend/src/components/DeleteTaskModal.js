@@ -20,7 +20,10 @@ const DeleteTaskModal = ({
             Authorization: `Bearer ${token}`,
           },
         };
-        const { data } = await axios.delete(`/api/task/${taskId}`, config);
+        const { data } = await axios.delete(
+          `https://tempo-13s6.onrender.com/api/task/${taskId}`,
+          config
+        );
         console.log(data.message);
         const updatedTask = allTasks.filter((t) => t._id !== taskId);
         setAllTasks(updatedTask);
