@@ -4,8 +4,9 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import Navbar from "../components/Navbar";
 import SingleTask from "../components/SingleTask";
 import Header from "../components/Header";
-import { Box } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { TaskState } from "../context/AuthProvider";
+import { BASE_URL } from "../utils";
 
 const Container = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -65,10 +66,7 @@ const Container = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get(
-          "https://tempo-13s6.onrender.com/api/task",
-          config
-        );
+        const response = await axios.get(`${BASE_URL}/api/task`, config);
         const data = response.data?.allTasks;
         setAllTasks(data);
         setIsLoading(false);
@@ -81,7 +79,19 @@ const Container = () => {
   }, []);
 
   if (isLoading) {
-    return <div>loading...</div>;
+    return (
+      <Box
+        bgcolor={"#dee1e6"}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+        minHeight={"100vh"}
+        flexDirection={"column"}
+      >
+        <Typography>wait 30-50 seconds, free services take time</Typography>
+        <CircularProgress color="warning" />
+      </Box>
+    );
   } else {
     return (
       <DragDropContext onDragEnd={onDragEnd}>

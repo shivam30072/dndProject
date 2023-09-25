@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import axios from "axios";
 import { TaskState } from "../context/AuthProvider";
+import { BASE_URL } from "../utils";
 
 const Authenticate = () => {
   const [open, setOpen] = useState(true);
@@ -58,7 +59,7 @@ const Authenticate = () => {
         },
       };
       const { data } = await axios.post(
-        `https://tempo-13s6.onrender.com/api/user/${loginSignup}`,
+        `${BASE_URL}/api/user/${loginSignup}`,
         userInfo,
         config
       );

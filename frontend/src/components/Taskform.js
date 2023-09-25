@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { TaskState } from "../context/AuthProvider";
+import { BASE_URL } from "../utils";
 
 const Taskform = ({
   setAllTasks,
@@ -47,7 +48,7 @@ const Taskform = ({
         },
       };
       const { data } = await axios.patch(
-        `https://tempo-13s6.onrender.com/api/task/${taskId}`,
+        `${BASE_URL}/api/task/${taskId}`,
         editedtaskdetails,
         config
       );
@@ -87,7 +88,7 @@ const Taskform = ({
         },
       };
       const { data } = await axios.post(
-        "https://tempo-13s6.onrender.com/api/task",
+        `${BASE_URL}/api/task`,
         taskDetails,
         config
       );

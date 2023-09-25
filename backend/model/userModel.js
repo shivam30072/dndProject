@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 30,
     },
+
     email: {
       type: String,
       required: [true, "Please Provide email"],
@@ -19,10 +20,32 @@ const userSchema = new mongoose.Schema(
       ],
       unique: true,
     },
+
     password: {
       type: String,
       required: [true, "Please Provide password"],
       minlength: 6,
+    },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    emailVerifyToken: {
+      type: String,
+    },
+
+    emailVerifyTokenExpiry: {
+      type: Date,
+    },
+
+    forgotPasswordToken: {
+      type: String,
+    },
+
+    forgotPasswordTokenExpiry: {
+      type: Date,
     },
   },
   { timestamps: true }

@@ -2,6 +2,7 @@ import { Button, Dialog, DialogActions, DialogTitle } from "@mui/material";
 import axios from "axios";
 import React from "react";
 import { TaskState } from "../context/AuthProvider";
+import { BASE_URL } from "../utils";
 
 const DeleteTaskModal = ({
   allTasks,
@@ -21,7 +22,7 @@ const DeleteTaskModal = ({
           },
         };
         const { data } = await axios.delete(
-          `https://tempo-13s6.onrender.com/api/task/${taskId}`,
+          `${BASE_URL}/api/task/${taskId}`,
           config
         );
         console.log(data.message);
