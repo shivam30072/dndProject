@@ -18,4 +18,4 @@
 <img src="/frontend/public/dndform.png" alt="form" />
 
 <h2>hosted link</h2>
-https://dnd-apnaboard-ew6o.onrender.com/
+https://trooter.netlify.app/
