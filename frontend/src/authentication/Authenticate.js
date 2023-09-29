@@ -19,8 +19,9 @@ const Authenticate = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    loginToken: "",
   });
-  const { name, email, password, confirmPassword } = userData;
+  const { name, email, password, confirmPassword, loginToken } = userData;
   const { setIsLoggedIn } = TaskState();
 
   const handleChangeForm = () => {
@@ -50,6 +51,7 @@ const Authenticate = () => {
       userInfo = {
         email,
         password,
+        token: loginToken,
       };
     }
     try {
@@ -152,6 +154,19 @@ const Authenticate = () => {
           fullWidth
           onChange={handleInputChange}
         />
+        {loginSignup === "login" && (
+          <TextField
+            sx={{ marginTop: 2 }}
+            value={loginToken}
+            margin="dense"
+            name="loginToken"
+            label="Token"
+            type="password"
+            variant="outlined"
+            fullWidth
+            onChange={handleInputChange}
+          />
+        )}
         {loginSignup === "signup" && (
           <TextField
             sx={{ marginTop: 2 }}
