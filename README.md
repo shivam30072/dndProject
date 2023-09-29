@@ -18,4 +18,4 @@
 <img src="/frontend/public/dndform.png" alt="form" />
 
 <h2>hosted link</h2>
-https://trooter.netlify.app/
+https://6511b017e7943d4357e2d406--trooter.netlify.app/
