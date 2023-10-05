@@ -81,7 +81,6 @@ const Taskform = ({
     };
     // post request for adding task
     try {
-      console.log("token", token);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

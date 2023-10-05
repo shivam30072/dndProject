@@ -1,8 +1,10 @@
 import {
+  Alert,
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
+  Snackbar,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,6 +15,9 @@ import { BASE_URL } from "../utils";
 
 const Authenticate = () => {
   const [open, setOpen] = useState(true);
+  const [toast, setToast] = useState(false);
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("");
   const [loginSignup, setLoginSignup] = useState("signup");
   const [userData, setUserData] = useState({
     name: "",
@@ -71,8 +76,16 @@ const Authenticate = () => {
         setIsLoggedIn(true);
         setOpen(false);
         window.location.reload();
+      } else {
+        setToast(true);
+        setMessage(data?.message);
+        setType(data?.type);
+        setLoginSignup("login");
       }
     } catch (error) {
+      setToast(true);
+      setMessage(error?.response?.data?.message);
+      setType(error?.response?.data?.type);
       console.log("error occured", error);
     }
   };
@@ -89,7 +102,6 @@ const Authenticate = () => {
         return;
       }
       apiCallForAuthentication();
-      setLoginSignup("login");
     } else {
       if (!email || !password) {
         alert("Both fields are mandatory");
@@ -103,113 +115,135 @@ const Authenticate = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      loginToken: "",
     });
   };
 
   return (
-    <Dialog
-      open={open}
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#e5e6e6",
-      }}
-    >
-      <DialogTitle sx={{}}>
-        {" "}
-        {loginSignup === "signup" ? "Sign Up" : "Login"}
-      </DialogTitle>
-      <DialogContent sx={{}}>
-        {loginSignup === "signup" && (
+    <>
+      <Dialog
+        open={open}
+        sx={{
+          minHeight: "100vh",
+          bgcolor: "#e5e6e6",
+        }}
+      >
+        <DialogTitle sx={{}}>
+          {" "}
+          {loginSignup === "signup" ? "Sign Up" : "Login"}
+        </DialogTitle>
+        <DialogContent sx={{}}>
+          {loginSignup === "signup" && (
+            <TextField
+              value={name}
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Name"
+              type="text"
+              fullWidth
+              variant="outlined"
+              onChange={handleInputChange}
+            />
+          )}
           <TextField
-            value={name}
-            autoFocus
+            sx={{ marginTop: 2 }}
+            value={email}
             margin="dense"
-            name="name"
-            label="Name"
+            name="email"
+            label="Email"
             type="text"
-            fullWidth
             variant="outlined"
+            fullWidth
             onChange={handleInputChange}
           />
-        )}
-        <TextField
-          sx={{ marginTop: 2 }}
-          value={email}
-          margin="dense"
-          name="email"
-          label="Email"
-          type="text"
-          variant="outlined"
-          fullWidth
-          onChange={handleInputChange}
-        />
-        <TextField
-          sx={{ marginTop: 2 }}
-          value={password}
-          margin="dense"
-          name="password"
-          label="Password"
-          type="password"
-          variant="outlined"
-          fullWidth
-          onChange={handleInputChange}
-        />
-        {loginSignup === "login" && (
           <TextField
             sx={{ marginTop: 2 }}
-            value={loginToken}
+            value={password}
             margin="dense"
-            name="loginToken"
-            label="Token"
+            name="password"
+            label="Password"
             type="password"
             variant="outlined"
             fullWidth
             onChange={handleInputChange}
           />
-        )}
-        {loginSignup === "signup" && (
-          <TextField
-            sx={{ marginTop: 2 }}
-            value={confirmPassword}
-            margin="dense"
-            name="confirmPassword"
-            label="Confirm Password"
-            type="password"
-            variant="outlined"
+          {loginSignup === "login" && (
+            <>
+              <TextField
+                sx={{ marginTop: 2 }}
+                value={loginToken}
+                margin="dense"
+                name="loginToken"
+                label="Token"
+                type="password"
+                variant="outlined"
+                fullWidth
+                onChange={handleInputChange}
+              />
+              <Typography>
+                If email is verified enter "12345678" in token field
+              </Typography>
+            </>
+          )}
+          {loginSignup === "signup" && (
+            <TextField
+              sx={{ marginTop: 2 }}
+              value={confirmPassword}
+              margin="dense"
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              onChange={handleInputChange}
+            />
+          )}
+          <Typography
+            mt={0.5}
+            ml={0.5}
+            color={"#3cc8ff"}
+            sx={{ cursor: "pointer" }}
+            onClick={handleChangeForm}
+          >
+            {loginSignup === "signup" ? "Login" : "Sign Up"}
+          </Typography>
+          <Button
+            sx={{
+              marginTop: 2,
+              paddingY: 1.5,
+              borderRadius: 3,
+              bgcolor: "#570df8",
+              "&:hover": { bgcolor: "#3936d8" },
+            }}
+            variant="contained"
             fullWidth
-            onChange={handleInputChange}
-          />
-        )}
-        <Typography
-          mt={0.5}
-          ml={0.5}
-          color={"#3cc8ff"}
-          sx={{ cursor: "pointer" }}
-          onClick={handleChangeForm}
-        >
-          {loginSignup === "signup" ? "Login" : "Sign Up"}
-        </Typography>
-        <Button
-          sx={{
-            marginTop: 2,
-            paddingY: 1.5,
-            borderRadius: 3,
-            bgcolor: "#570df8",
-            "&:hover": { bgcolor: "#3936d8" },
-          }}
-          variant="contained"
-          fullWidth
-          onClick={handleSubmit}
-        >
-          {"Submit"}
-        </Button>
-      </DialogContent>
-      {/* <DialogActions>
-          <Button sx={{ bgcolor: "#e5e6e6" }} onClick={handleClose}>
-            Close
+            onClick={handleSubmit}
+          >
+            {"Submit"}
           </Button>
-        </DialogActions> */}
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+      <Snackbar
+        open={toast}
+        autoHideDuration={3000}
+        onClose={() => {
+          setToast(false);
+        }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          variant="filled"
+          onClose={() => {
+            setToast(false);
+          }}
+          severity={type}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

@@ -22,6 +22,7 @@ const sendEmail = async (type, email, userId) => {
     };
 
     const response = await emailTransporter.sendMail(message);
+    return response;
   } catch (err) {
     console.log("error in mail", err);
   }
