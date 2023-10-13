@@ -91,4 +91,27 @@ const deleteTask = asyncHandler(async (req, res) => {
   res.status(404).json({ message: "Task does not exist" });
 });
 
-module.exports = { createTask, getAllTask, updateTask, deleteTask };
+const searchTask = asyncHandler(async (req, res) => {
+  let queryParams = req.query.search;
+  queryParams = queryParams.toLowerCase();
+  const userId = req.user.id;
+  if (!userId) {
+    res.status(400).json({ message: "User not authenticated" });
+    return;
+  }
+
+  const allTasks = await Task.find({ createdBy: userId }).sort("createdAt");
+  if (!queryParams) {
+    res.status(200).json({ allTasks });
+    return;
+  }
+
+  const filteredTasks = allTasks.filter(
+    (task) =>
+      task.title.includes(queryParams) || task.desc.includes(queryParams)
+  );
+
+  res.status(200).json({ filteredTasks });
+});
+
+module.exports = { createTask, getAllTask, updateTask, deleteTask, searchTask };
