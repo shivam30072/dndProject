@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Taskform from "./Taskform";
 import DeleteTaskModal from "./DeleteTaskModal";
 import Person2Icon from "@mui/icons-material/Person2";
-import { Avatar, Box, Button, Menu, MenuItem, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { TaskState } from "../context/AuthProvider";
+import axios from "axios";
+import { BASE_URL } from "../utils";
 
 const Navbar = ({
   allTasks,
@@ -20,9 +30,10 @@ const Navbar = ({
   setOpend,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [search, setSearch] = useState("");
   const dropDown = Boolean(anchorEl);
 
-  const { setUserDetails, setToken, setIsLoggedIn } = TaskState();
+  const { setUserDetails, setToken, setIsLoggedIn, token } = TaskState();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,6 +54,40 @@ const Navbar = ({
     setIsLoggedIn(false);
   };
 
+  useEffect(() => {
+    if (!search) {
+      return;
+    }
+
+    let debounceHandler = null;
+
+    async function searchTasks() {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        const response = await axios.get(
+          `${BASE_URL}/api/task/search?search=${search}`,
+          config
+        );
+        const data = response.data?.allTasks;
+        setAllTasks(data);
+      } catch (error) {
+        console.log("error occured", error);
+      }
+    }
+    debounceHandler = setTimeout(() => {
+      if (debounceHandler) {
+        clearTimeout(debounceHandler);
+      }
+      searchTasks();
+    }, 1000);
+
+    return () => clearTimeout(debounceHandler);
+  }, [search]);
+
   return (
     <Box
       minHeight={"10vh"}
@@ -58,18 +103,56 @@ const Navbar = ({
       px={2}
     >
       <Box>
-        <Typography fontSize={25} color={"white"}>
+        <Typography fontSize={{ xs: 14, sm: 18, md: 25 }} color={"white"}>
           Tempo
         </Typography>
       </Box>
-      <Box display={"flex"} gap={2.5}>
+      <TextField
+        onChange={(e) => setSearch(e.target.value)}
+        id="outlined-search"
+        type="search"
+        variant="outlined"
+        placeholder="Search"
+        InputProps={{ endAdornment: null }}
+        sx={{
+          border: "none",
+          bgcolor: "white",
+          outline: "none",
+          borderRadius: "2rem",
+          height: "2.8rem",
+          width: { xs: "8rem", sm: "18rem", md: "28rem" },
+          display: "flex",
+          justifyContent: "center",
+        }}
+      />
+      <Box display={"flex"} gap={{ xs: 0, md: 2.5 }}>
         <Button
-          sx={{ height: "2.5rem", width: "5rem", marginTop: "5px" }}
+          sx={{
+            display: { xs: "none", md: "flex" },
+            height: "2.5rem",
+            width: { xs: "2rem", md: "5rem" },
+            marginLeft: { xs: "1rem" },
+            marginTop: "5px",
+          }}
           variant="contained"
           color="primary"
           onClick={handleClickOpen}
         >
           add+
+        </Button>
+        <Button
+          sx={{
+            display: { xs: "flex", md: "none" },
+            height: "2.5rem",
+            width: "12px",
+            marginLeft: { xs: "1rem" },
+            marginTop: "5px",
+          }}
+          variant="contained"
+          color="primary"
+          onClick={handleClickOpen}
+        >
+          +
         </Button>
         <Button
           id="demo-customized-button"

@@ -12,3 +12,11 @@ body{
 ::-webkit-scrollbar-thumb {
   background-color: darkgrey;
 }
+
+.MuiInputBase-root.MuiOutlinedInput-root {
+  border-color: white;
+  border: none;
+  border-radius: 2rem;
+ width: 28rem;
+ height:2.8rem;
+}

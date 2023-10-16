@@ -100,18 +100,18 @@ const searchTask = asyncHandler(async (req, res) => {
     return;
   }
 
-  const allTasks = await Task.find({ createdBy: userId }).sort("createdAt");
+  let allTasks = await Task.find({ createdBy: userId }).sort("createdAt");
   if (!queryParams) {
     res.status(200).json({ allTasks });
     return;
   }
 
-  const filteredTasks = allTasks.filter(
+  allTasks = allTasks.filter(
     (task) =>
       task.title.includes(queryParams) || task.desc.includes(queryParams)
   );
 
-  res.status(200).json({ filteredTasks });
+  res.status(200).json({ allTasks });
 });
 
 module.exports = { createTask, getAllTask, updateTask, deleteTask, searchTask };
